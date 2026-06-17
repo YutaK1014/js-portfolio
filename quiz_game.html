@@ -3,20 +3,21 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>首都クイズゲーム</title>
+  <title>消滅した国家の首都クイズ</title>
   <style>
     :root {
-      --color-bg: #eef3f7;
-      --color-card: #ffffff;
-      --color-text: #17212b;
-      --color-muted: #667085;
-      --color-border: #d8e0e8;
-      --color-primary: #2563eb;
-      --color-primary-hover: #1d4ed8;
-      --color-success: #0f8a5f;
-      --color-error: #c2410c;
-      --color-surface: #f7fafc;
-      --shadow-card: 0 18px 50px rgba(23, 33, 43, 0.13);
+      --color-bg: #0d0d10;
+      --color-card: #17171c;
+      --color-text: #f7f2ef;
+      --color-muted: #b8adab;
+      --color-border: #39323a;
+      --color-primary: #d7263d;
+      --color-primary-hover: #a80f24;
+      --color-success: #42d392;
+      --color-error: #ff8f9d;
+      --color-surface: #111115;
+      --color-input: #fff8f6;
+      --shadow-card: 0 18px 52px rgba(0, 0, 0, 0.42);
       --radius-card: 8px;
       --radius-control: 6px;
     }
@@ -32,10 +33,11 @@
       place-items: center;
       padding: 24px;
       background:
-        linear-gradient(135deg, rgba(37, 99, 235, 0.12), transparent 34%),
+        linear-gradient(145deg, rgba(215, 38, 61, 0.24), transparent 36%),
+        linear-gradient(315deg, rgba(168, 15, 36, 0.22), transparent 32%),
         var(--color-bg);
       color: var(--color-text);
-      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      font-family: "Yu Gothic", "Hiragino Kaku Gothic ProN", Meiryo, system-ui, sans-serif;
       line-height: 1.6;
     }
 
@@ -48,6 +50,13 @@
       box-shadow: var(--shadow-card);
     }
 
+    .quiz-title {
+      margin: 0 0 18px;
+      font-size: clamp(1.45rem, 4vw, 2rem);
+      line-height: 1.3;
+      letter-spacing: 0;
+    }
+
     .quiz-status {
       display: flex;
       align-items: center;
@@ -56,7 +65,7 @@
       margin-bottom: 20px;
       color: var(--color-muted);
       font-size: 0.95rem;
-      font-weight: 700;
+      font-weight: 800;
     }
 
     .score {
@@ -65,7 +74,7 @@
     }
 
     .question-area {
-      min-height: 132px;
+      min-height: 138px;
       display: grid;
       place-items: center;
       padding: 24px;
@@ -79,7 +88,8 @@
     .question-text {
       margin: 0;
       font-size: clamp(1.35rem, 4vw, 2rem);
-      font-weight: 800;
+      font-weight: 900;
+      line-height: 1.45;
       overflow-wrap: anywhere;
     }
 
@@ -96,19 +106,20 @@
       padding: 0 14px;
       border: 1px solid var(--color-border);
       border-radius: var(--radius-control);
-      background: #ffffff;
-      color: var(--color-text);
+      background: var(--color-input);
+      color: #181417;
       font: inherit;
+      font-weight: 800;
     }
 
     input[type="text"]:focus {
       border-color: var(--color-primary);
-      outline: 3px solid rgba(37, 99, 235, 0.16);
+      outline: 3px solid rgba(215, 38, 61, 0.3);
     }
 
     input[type="text"]:disabled {
-      background: #eef2f6;
-      color: var(--color-muted);
+      background: #9d9696;
+      color: #4e4749;
       cursor: not-allowed;
     }
 
@@ -118,9 +129,9 @@
       border: 0;
       border-radius: var(--radius-control);
       background: var(--color-primary);
-      color: #ffffff;
+      color: #fff8f6;
       font: inherit;
-      font-weight: 800;
+      font-weight: 900;
       cursor: pointer;
       transition: background 0.18s ease, transform 0.18s ease;
       white-space: nowrap;
@@ -132,25 +143,28 @@
     }
 
     .button:disabled {
-      background: #a8b4c2;
+      background: #595158;
+      color: #c8bfc0;
       cursor: not-allowed;
       transform: none;
     }
 
     .button.secondary {
-      background: #17212b;
+      border: 1px solid var(--color-border);
+      background: #242129;
     }
 
     .button.secondary:hover:not(:disabled) {
-      background: #2b3642;
+      background: #30252c;
     }
 
     .feedback {
       min-height: 34px;
       margin: 0 0 18px;
       color: var(--color-muted);
-      font-weight: 700;
+      font-weight: 800;
       text-align: center;
+      overflow-wrap: anywhere;
     }
 
     .feedback.correct {
@@ -186,20 +200,27 @@
       }
 
       .question-area {
-        min-height: 116px;
+        min-height: 122px;
         padding: 18px;
       }
 
+      .answer-row {
+        flex-direction: column;
+      }
+
       .button {
+        width: 100%;
         padding: 0 14px;
       }
     }
   </style>
 </head>
 <body>
-  <main class="quiz-card" aria-label="首都クイズゲーム">
+  <main class="quiz-card" aria-label="消滅した国家の首都クイズ">
+    <h1 class="quiz-title">消滅した国家の首都クイズ</h1>
+
     <div class="quiz-status">
-      <span id="questionCounter">問題 0 / 3</span>
+      <span id="questionCounter">問題 0 / 10</span>
       <span id="scoreDisplay" class="score">スコア: 0</span>
     </div>
 
@@ -222,9 +243,16 @@
 
   <script>
     const questions = [
-      { question: "日本の首都は？", answer: "東京" },
-      { question: "フランスの首都は？", answer: "パリ" },
-      { question: "アメリカの首都は？", answer: "ワシントン" }
+      { question: "ソビエト連邦の首都は？", answer: "モスクワ" },
+      { question: "ハワイ王国の首都は？", answer: "ホノルル" },
+      { question: "西ドイツの首都は？", answer: "ボン" },
+      { question: "琉球王国の首都は？", answer: "首里" },
+      { question: "ロシア帝国の首都は？", answer: "サンクトペテルブルク" },
+      { question: "バイエルン王国の首都は？", answer: "ミュンヘン" },
+      { question: "ティムール帝国の首都は？", answer: "サマルカンド" },
+      { question: "インカ帝国の首都は？", answer: "クスコ" },
+      { question: "ヴィシーフランスの首都は", answer: "ヴィシー" },
+      { question: "アメリカ連合国の首都は？", answer: "リッチモンド" }
     ];
 
     let currentQuestionIndex = 0;
@@ -241,8 +269,8 @@
     const retryButton = document.getElementById("retryButton");
 
     function updateStatus() {
-      const visibleQuestionNumber = Math.min(currentQuestionIndex + 1, questions.length);
-      questionCounter.textContent = `問題 ${isPlaying ? visibleQuestionNumber : 0} / ${questions.length}`;
+      const visibleQuestionNumber = isPlaying ? Math.min(currentQuestionIndex + 1, questions.length) : 0;
+      questionCounter.textContent = `問題 ${visibleQuestionNumber} / ${questions.length}`;
       scoreDisplay.textContent = `スコア: ${score}`;
     }
 
@@ -260,9 +288,15 @@
     }
 
     function showQuestion() {
+      if (!isPlaying || currentQuestionIndex >= questions.length) {
+        return;
+      }
+
       updateStatus();
       questionText.textContent = questions[currentQuestionIndex].question;
       answerInput.value = "";
+      answerInput.disabled = false;
+      submitButton.disabled = false;
       answerInput.focus();
     }
 
@@ -273,11 +307,15 @@
 
       const currentQuestion = questions[currentQuestionIndex];
       const userAnswer = answerInput.value.trim();
-      const isCorrect = userAnswer === currentQuestion.answer;
+      const correctAnswer = currentQuestion.answer.trim();
+      const isCorrect = userAnswer === correctAnswer;
+
+      answerInput.disabled = true;
+      submitButton.disabled = true;
 
       if (isCorrect) {
         score += 1;
-        feedback.textContent = "正解です！";
+        feedback.textContent = "正解です。";
         feedback.className = "feedback correct";
       } else {
         feedback.textContent = `不正解です。正解は「${currentQuestion.answer}」です。`;
@@ -292,7 +330,11 @@
         return;
       }
 
-      showQuestion();
+      window.setTimeout(() => {
+        feedback.textContent = "";
+        feedback.className = "feedback";
+        showQuestion();
+      }, 900);
     }
 
     function finishGame() {
